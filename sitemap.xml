@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/10/15/ligando-extensoes-a-linguagens-no-vim/</loc>
+    <lastmod>2014-10-15T23:31:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/09/06/streams-em-php/</loc>
+    <lastmod>2014-09-06T20:26:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/08/12/entendendo-uma-negociacao-de-conteudo-via-cartas/</loc>
+    <lastmod>2014-08-12T22:17:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/08/11/olhar-urbano-01/</loc>
+    <lastmod>2014-08-11T23:08:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/04/23/gitql-do-que-e-feito/</loc>
+    <lastmod>2014-04-23T09:02:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/03/15/mostrando-o-branch-atual-no-bash/</loc>
+    <lastmod>2014-03-15T22:19:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/03/09/phartitura-um-novo-modo-de-observar-suas-dependencias-em-php/</loc>
+    <lastmod>2014-03-09T23:30:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2014/01/25/acessando-a-api-do-packagist/</loc>
+    <lastmod>2014-01-25T23:41:00-02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/12/19/o-que-caiu-na-zcpe/</loc>
+    <lastmod>2013-12-19T23:13:00-02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/10/06/estudo-dirigido-zce/</loc>
+    <lastmod>2013-10-06T21:43:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/09/28/conversao-de-base-numerica/</loc>
+    <lastmod>2013-09-28T18:32:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/09/01/meu-metaframework-em-php/</loc>
+    <lastmod>2013-09-01T12:22:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/08/17/e-ai-ta-gostando-de-sp/</loc>
+    <lastmod>2013-08-17T14:59:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/2013/08/17/begin/</loc>
+    <lastmod>2013-08-17T00:01:00-03:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://cloudson.github.io/blog/archives/</loc>
+    <lastmod>2015-01-23T00:13:53-02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://cloudson.github.io/</loc>
+    <lastmod>2015-01-23T00:13:53-02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
+</urlset>
