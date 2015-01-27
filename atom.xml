@@ -4,7 +4,7 @@
   <title><![CDATA[Claudson Oliveira]]></title>
   <link href="http://cloudson.github.io/atom.xml" rel="self"/>
   <link href="http://cloudson.github.io/"/>
-  <updated>2015-01-24T12:54:24-02:00</updated>
+  <updated>2015-01-26T23:01:29-02:00</updated>
   <id>http://cloudson.github.io/</id>
   <author>
     <name><![CDATA[Claudson Oliveira]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[new Layout($blog)]]></title>
+    <link href="http://cloudson.github.io/2015/01/26/new-layout-$blog/"/>
+    <updated>2015-01-26T22:57:07-02:00</updated>
+    <id>http://cloudson.github.io/2015/01/26/new-layout-$blog</id>
+    <content type="html"><![CDATA[<p>Um novo ano começando, e pra começar dei uma mexida no blog que estava meio abandonado.<br/>
+2014 foi um ano bem importante pois escrevi 8 posts, um recorde pra todas as minhas tentativas de blogs anteriores.<br/>
+Esse ano, pretendo escrever mais, entrei pro <a href="https://twitter.com/ClubeDosPosts">@clubeDosPosts</a> que tem a proposta de &ldquo;pressionar&rdquo; os blogueiros a postarem uma vez por mês.</p>
+
+<p>Continei a usar o jekyll/Octopress pra gerar o site e usar o github pra continuar guardando meus dados.
+Esse ano pretendo me esforçar nos estudos API&rsquo;s e microservices!
+Vamos nessa!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ligando extensões a linguagens no Vim]]></title>

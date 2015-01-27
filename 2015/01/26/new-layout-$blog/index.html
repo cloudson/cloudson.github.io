@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Ligando extensões a linguagens no Vim - Claudson Oliveira</title>
+  <title>new Layout($blog) - Claudson Oliveira</title>
   <meta name="author" content="Claudson Oliveira">
 
    
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cloudson.github.io/2014/10/15/ligando-extensoes-a-linguagens-no-vim">
+  <link rel="canonical" href="http://cloudson.github.io/2015/01/26/new-layout-$blog">
   <link href="/favicon.png" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
@@ -98,7 +98,7 @@
 
   <header>
   <div class="jumbotron">
-    Ligando Extensões a Linguagens No Vim
+    New Layout($blog)
 	<h5>
 
 
@@ -111,38 +111,18 @@
   
 
 
-<i class="icon-calendar-empty"></i> <time datetime="2014-10-15T23:31:00-03:00" pubdate data-updated="true">Oct 15, 2014</time></h5>
+<i class="icon-calendar-empty"></i> <time datetime="2015-01-26T22:57:07-02:00" pubdate data-updated="true">Jan 26, 2015</time></h5>
   </div>
 </header>
   <div class="row-fluid">
     <div class="span12">
-    <p>Estou engatinhando no vim, porém já venho substituído meu editor de texto principal (o sublime). Trabalhando com Drupal, muitos arquivos possuem extensões que fogem do padrão da linguagem php, então nesse pequeno post mostro como dizer pro editor que a extensão X refere-se à linguagem Y.</p>
+    <p>Um novo ano começando, e pra começar dei uma mexida no blog que estava meio abandonado.<br/>
+2014 foi um ano bem importante pois escrevi 8 posts, um recorde pra todas as minhas tentativas de blogs anteriores.<br/>
+Esse ano, pretendo escrever mais, entrei pro <a href="https://twitter.com/ClubeDosPosts">@clubeDosPosts</a> que tem a proposta de &ldquo;pressionar&rdquo; os blogueiros a postarem uma vez por mês.</p>
 
-<p>Primeiramente criarei um arquivo de configuração de nome .vimrc na home do meu usuário local.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="err">&quot;</span> em ~/.vimrc
-</span><span class='line'>
-</span><span class='line'>autocmd BufRead,BufNewFile <span class="se">\*</span>.module <span class="nb">set </span><span class="nv">filetype</span><span class="o">=</span>php
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Com essa linha estamos executando um comando automaticamente no vim assim que lermos ou abrirmos um arquivo que termina com <strong>.module</strong>, esse comando seta o editor dizendo que o tipo de arquivo é um php.
-Como executar esse arquivo a cada chamada do vim ? Vamos chamá-lo no arquivo /etc/vim/vimrc no debian</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="s2">&quot; final do arquivo /etc/vim/vimrc</span>
-</span><span class='line'>
-</span><span class='line'><span class="s2">. &quot;</span>~/.vimrc<span class="err">&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pronto! :)
-Este post é mais uma daquelas dicas rápidas que seguem de lembrete pra mim. Caso você descubra uma forma mais legal de resolver o problema, não deixe de comentar. Abraços.</p>
+<p>Continei a usar o jekyll/Octopress pra gerar o site e usar o github pra continuar guardando meus dados.
+Esse ano pretendo me esforçar nos estudos API&rsquo;s e microservices!
+Vamos nessa!</p>
 
     </div>
   </div>
@@ -158,14 +138,6 @@ Este post é mais uma daquelas dicas rápidas que seguem de lembrete pra mim. Ca
         <p class="meta">
         
         
-
-
-
-  <a href="/blog/categories/shell/"><span class="badge">shell</span></a>
-
-  <a href="/blog/categories/vim/"><span class="badge">vim</span></a>
-
-
 
 
         </p>
@@ -193,10 +165,8 @@ Este post é mais uma daquelas dicas rápidas que seguem de lembrete pra mim. Ca
       <div class="span12">
         <p class="meta">
           
-            <a class="basic-alignment left" href="/2014/09/06/streams-em-php/" title="Previous Post: Streams em PHP">&laquo; Streams em PHP</a>
+            <a class="basic-alignment left" href="/2014/10/15/ligando-extensoes-a-linguagens-no-vim/" title="Previous Post: Ligando extensões a linguagens no Vim">&laquo; Ligando extensões a linguagens no Vim</a>
           
-          
-            <a class="basic-alignment right" href="/2015/01/26/new-layout-$blog/" title="Next Post: new Layout($blog)">new Layout($blog) &raquo;</a>
           
         </p>
       </div>
@@ -234,8 +204,8 @@ Este post é mais uma daquelas dicas rápidas que seguem de lembrete pra mim. Ca
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cloudson.github.io/2014/10/15/ligando-extensoes-a-linguagens-no-vim/';
-        var disqus_url = 'http://cloudson.github.io/2014/10/15/ligando-extensoes-a-linguagens-no-vim/';
+        var disqus_identifier = 'http://cloudson.github.io/2015/01/26/new-layout-$blog/';
+        var disqus_url = 'http://cloudson.github.io/2015/01/26/new-layout-$blog/';
         var disqus_script = 'embed.js';
       
     (function () {
