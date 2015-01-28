@@ -4,7 +4,7 @@
   <title><![CDATA[Category: api | Claudson Oliveira]]></title>
   <link href="http://cloudson.github.io/blog/categories/api/atom.xml" rel="self"/>
   <link href="http://cloudson.github.io/"/>
-  <updated>2015-01-26T23:14:20-02:00</updated>
+  <updated>2015-01-28T09:40:49-02:00</updated>
   <id>http://cloudson.github.io/</id>
   <author>
     <name><![CDATA[Claudson Oliveira]]></name>
@@ -12,6 +12,329 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[API's - Uma comparação com websites]]></title>
+    <link href="http://cloudson.github.io/2015/01/28/apis-uma-comparacao-com-websites/"/>
+    <updated>2015-01-28T09:40:00-02:00</updated>
+    <id>http://cloudson.github.io/2015/01/28/apis-uma-comparacao-com-websites</id>
+    <content type="html"><![CDATA[<p>Novamente aqui para falar sobre HTTP e API&rsquo;s. Cada vez mais tenho a certeza de que apesar da necessidade, desenvolver serviços web envolve problemas arquiteturais e gerenciais muito complexos. Dessa vez viveremos um comparativo entre um serviço REST e websites.</p>
+
+<h3>O que é um serviço web?</h3>
+
+<p>Primeiro vamos dar nomes aos bois;</p>
+
+<p><em>&ldquo;Um website é um conjunto de hipertextos acessíveis geralmente pelo protocolo HTTP na internet.&rdquo;</em></p>
+
+<p>Ou seja, por uma página web, temos hipertexos que se ligam a outros hipertextos através de links, que via navegador são clicáveis.</p>
+
+<p>Um serviço web é uma aplicação sob o http, criada com o intuito de prover informações a outras aplicações. Assim, se a prefeitura da sua cidade detêm informações do posicionamento dos ônibus da cidade em tempo real, ela possui, poderia/deveria ter um serviço web. Se o facebook consegue fornecer dados de usuários para que criemos aplicações, ele também fornece uma api, que seria uma maneira de se comunicar ao webservice deles.</p>
+
+<p>Em um serviço web apenas dados são importantes. Esses dados podem ser dividios em estruturas que são representações de algo. Uma representação de um usuário (e não usuário em si), uma representação de um lugar (e não o lugar em si), uma representação de uma notícia (e não a notícia em si). Essa representação é chamada de <em>recurso</em> .</p>
+
+<p>Você também pode (e deve) desenvolver serviços dentro do domínio de sua aplicação, afinal, hoje o mesmo dado utilizado num website é requerido por exemplo num aplicativo mobile.</p>
+
+<h3>REST e SOAP</h3>
+
+<p>Ao desenvolver uma API, podemos seguir um de dois padrões bem conhecidos. O primeiro é o SOAP, um padrão mais rígido que utiliza de um xml descritivo (wsdl) para definir as rotas, tipos de mensagens e retornos. Isso o torna mais flexível que o segundo.
+O REST usa o próprio HTTP como padrão de transporte de mensagens, ou seja, o corpo e o header das mensagens são os mesmos de uma request HTTP comum. Veja abaixo uma request que pede um recurso notícia de id 5.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /news/5
+</span><span class='line'>Host: api.meusite.com</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Response:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-type: application/json; charset=UTF-8&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>{
+</span><span class='line'> id: 5,
+</span><span class='line'> title: &ldquo;Manifestantes protestam contra aumento da passagem em SP&rdquo;,
+</span><span class='line'> summary: &ldquo;Em ato pacífico, grupo percorreu vias da Zona Oeste da capital&hellip;&rdquo;,
+</span><span class='line'> access: [
+</span><span class='line'> &ldquo;2015-01-27 22:00:00&rdquo;, &ldquo;2015-01-27 22:31:00&rdquo;
+</span><span class='line'> ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure></notextile></div>
+A resposta da requisição retornou em formato json o recurso que contém, alem de id, title e resume, um array com todas as datas de acesso dessa notícia.</p>
+
+<h3>Content negotiation</h3>
+
+<p>Como vimos no <a href="/2014/08/12/entendendo-uma-negociacao-de-conteudo-via-cartas">post sobre negociação de conteúdo</a>, é uma boa prática que serviços web sejam flexíveis quanto ao tipo de retorno, graças a uma negociação feita via cabeçalho HTTP. Pense agora em requisitar o mesmo recurso notícia de id 5 em formato HTML.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /news/5
+</span><span class='line'>Host: api.meusite.com
+</span><span class='line'>Accept: text/html; q=1.0 , application/json; 0.5&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Teremos a seguinte resposta (vista pelo navegador):</p>
+
+<p><img src="/images/posts/g1-mobile-noticia.png" alt="g1 mobile site" /></p>
+
+<h3>Visibilidade de serviços web</h3>
+
+<p>Uma API pode ser definida como pública ou privada, e os conceitos são simples.<br/>
+Uma API privada não está disponível pra toda a internet, geralmente ela é acessível apenas dentro de uma rede ou para um grupo restrito de clientes (ex: parceiros de uma empresa). Podemos comparar isso à uma página administrativa que lista todas as vendas de um ecommerce no mês. Essas informações sensíveis nunca poderão ser utilizadas por usuários comuns na web.<br/>
+Ao contrário, uma web pública está na web e pode ser consumida por qualquer pessoa. São casos de API&rsquo;s públicas o <a href="https://developers.facebook.com/docs/graph-api">graph API do facebook</a>, <a href="https://dev.twitter.com/rest/public">API do twitter</a> ou mesma a <a href="https://developer.github.com/v3/">API do github</a>.
+Assim como sites oscilam em partes públicas e privadas, uma arquitetura orientada a serviços também pode (e deve) conter essa característica.</p>
+
+<h3>Linkando recursos</h3>
+
+<p>Até agora vimos que é bem provável que pra toda página web é possível ter uma API relacionada que expõe parte dos conteúdos que antes eram encontrados só no HTML.Mas também vimos que o princípio básico da web e do HTTP é a navegação através de hiperlinks.
+Podemos utilizar do padrão <a href="http://stateless.co/hal_specification.html">HAL</a> para definir novos mime-types de retorno e assim linkarmos recursos.</p>
+
+<p>Vamos voltar àquela request que busca um recurso notícia :
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /news/5
+</span><span class='line'>Host: api.meusite.com
+</span><span class='line'>Accept: text/html; q=1.0 , application/json; 0.5&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Teríamos como HTML</p>
+
+<p><img src="/images/posts/g1-mobile-relacionadas.png" alt="" /></p>
+
+<p>Podemos ver na imagem que na seção &ldquo;Saiba mais&rdquo; há links para mais 3 notícias. Falando em API&rsquo;s podemos agir com algumas estratégias (ver atriuto <em>similar</em>):</p>
+
+<h4>* Notícias relacionadas embedadas:</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-type: application/json; charset=UTF-8&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>{
+</span><span class='line'> id: 5,
+</span><span class='line'> title: &ldquo;Manifestantes protestam contra aumento da passagem em SP&rdquo;,
+</span><span class='line'> summary: &ldquo;Em ato pacífico, grupo percorreu vias da Zona Oeste da capital&hellip;&rdquo;,
+</span><span class='line'> access: [
+</span><span class='line'> &ldquo;2015-01-27 22:00:00&rdquo;, &ldquo;2015-01-27 22:31:00&rdquo;
+</span><span class='line'> ],
+</span><span class='line'> similar: [&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>  { id: 6 , title: "FOTOS: quarto ato contra aumento da tarifa do transporte em SP", }, 
+</span><span class='line'>  { id: 8, title: "MPL faz caminhada contra tarifa na Zona Leste de São Paulo", },
+</span><span class='line'>  { id: 20, title: "Bombas, depredação e detidos marcam 2º ato contra tarifa em SP" }
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p> ]
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h4>* Caminho para os outros recursos</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-type: application/json; charset=UTF-8&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>{
+</span><span class='line'> id: 5,
+</span><span class='line'> title: &ldquo;Manifestantes protestam contra aumento da passagem em SP&rdquo;,
+</span><span class='line'> summary: &ldquo;Em ato pacífico, grupo percorreu vias da Zona Oeste da capital&hellip;&rdquo;,
+</span><span class='line'> access: [
+</span><span class='line'> &ldquo;2015-01-27 22:00:00&rdquo;, &ldquo;2015-01-27 22:31:00&rdquo;
+</span><span class='line'> ],
+</span><span class='line'> similar: [&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>  "/news/6", 
+</span><span class='line'>  "/news/8",
+</span><span class='line'>  "/news/20"
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p> ]
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h4>* Considerando que notíciasRelacionadas é outro recurso isolado</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-type: application/json; charset=UTF-8&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>{
+</span><span class='line'> id: 5,
+</span><span class='line'> title: &ldquo;Manifestantes protestam contra aumento da passagem em SP&rdquo;,
+</span><span class='line'> summary: &ldquo;Em ato pacífico, grupo percorreu vias da Zona Oeste da capital&hellip;&rdquo;,
+</span><span class='line'> access: [
+</span><span class='line'> &ldquo;2015-01-27 22:00:00&rdquo;, &ldquo;2015-01-27 22:31:00&rdquo;
+</span><span class='line'> ],
+</span><span class='line'> similar: &ldquo;/news/5/similars&rdquo;
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>A que eu acho mais interessante e a que o padrão HAL defende é a segunda. Dessa forma você consegue fazer com que seu recurso seja mais leve, entregando só o essencial e ele aponta caminhos para outros recursos relacionados, caso seja necessário pelo usuário.
+Mas para utilizar o padrão você ainda precisa usar atributos no seu recurso que seriam metainformações, como podemos ver abaixo:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-type: application/hal+json; charset=UTF-8&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>{
+</span><span class='line'> _links: {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>self:  {  
+</span><span class='line'>    href : "/" 
+</span><span class='line'>}, 
+</span><span class='line'>curies: [
+</span><span class='line'>    {
+</span><span class='line'>        "name" : "cl", 
+</span><span class='line'>        "href" : "api.meusite.com", 
+</span><span class='line'>        "templated" : true
+</span><span class='line'>    }
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>   ]
+</span><span class='line'> },
+</span><span class='line'> id: 5,
+</span><span class='line'> title: &ldquo;Manifestantes protestam contra aumento da passagem em SP&rdquo;,
+</span><span class='line'> summary: &ldquo;Em ato pacífico, grupo percorreu vias da Zona Oeste da capital&hellip;&rdquo;,
+</span><span class='line'> access: [
+</span><span class='line'> &ldquo;2015-01-27 22:00:00&rdquo;, &ldquo;2015-01-27 22:31:00&rdquo;
+</span><span class='line'> ],
+</span><span class='line'> cl:&lt;a href="news:">news:&lt;/a> [&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>  { "href": "/news/6"} , 
+</span><span class='line'>  { "href": "/news/8"},
+</span><span class='line'>  { "href": "/news/20}"
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p> ]
+</span><span class='line'>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Aqui sim temos definições de link self (assim como temos quando estamos usando o navegador web), definições da uri base e um alias para tal (&ldquo;cl&rdquo; é na verdade api.meusite.com) para aí sim dizer que cl:news são links para outros recursos.<br/>
+Como podemos perceber no cabeçalho dessa resposta, utilizamos o mime-type <em>application/hal+json</em> que não deixa de ser um próprio json com alguns metadados. Na minha opinião poderíamos utilizar a próŕia negociação de conteúdo pra decidir entre hal+json ou json puro.</p>
+
+<h3>Conclusão</h3>
+
+<p>Websites e webservices podem ter muito em comum, e é um bom caminho para perceber como nossas aplicações sempre puderam ser feitas com o pensamento <a href="http://www.api-first.com/">API first</a>.
+Isso pode nos levar a um novo assunto que <a href="http://www.thoughtworks.com/radar/techniques/microservice-envy">está em alta,</a> <a href="http://martinfowler.com/articles/microservices.html">os microservices</a>.  Porém deixaremos isso para uma próxima conversa!
+<em>FalouValeu!</em></p>
+
+<h3>Fontes:</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Domain-driven_design">Definição de domínio: Domain driven design</a> <br/>
+<a href="http://www.publicapis.com">Lista de API&rsquo;s públicas</a> <br/>
+<a href="http://stateless.co/hal_specification.html">HAL &ndash; especificação</a><br/>
+<a href="http://g1.globo.com/sao-paulo/noticia/2015/01/manifestantes-protestam-contra-aumento-da-passagem-em-sp.html">Notícia do G1 &ndash; printscreen</a><br/>
+<a href="http://www.api-first.com/">API first</a><br/>
+<a href="http://martinfowler.com/articles/microservices.html">Microservices</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[HTTP - Entendendo uma negociação de conteúdo via cartas]]></title>
