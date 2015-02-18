@@ -4,7 +4,7 @@
   <title><![CDATA[Claudson Oliveira]]></title>
   <link href="http://cloudson.github.io/atom.xml" rel="self"/>
   <link href="http://cloudson.github.io/"/>
-  <updated>2015-01-28T09:40:49-02:00</updated>
+  <updated>2015-02-18T09:00:20-02:00</updated>
   <id>http://cloudson.github.io/</id>
   <author>
     <name><![CDATA[Claudson Oliveira]]></name>
@@ -12,6 +12,1302 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TDD com phpunit: Um exemplo prático]]></title>
+    <link href="http://cloudson.github.io/2015/02/18/tdd-com-phpunit-um-exemplo-pratico/"/>
+    <updated>2015-02-18T09:00:00-02:00</updated>
+    <id>http://cloudson.github.io/2015/02/18/tdd-com-phpunit-um-exemplo-pratico</id>
+    <content type="html"><![CDATA[<p>Hoje falaremos sobre testes unitários. Por ser meu primeiro post no assunto, darei uma introdução até chegarmos na maior dificuldade para iniciantes, <em>mockar</em> objetos.<br/>
+Os exemplos serão em php com <a href="https://phpunit.de/">phpunit</a>, mas os conceitos podem e devem ser utilizados em qualquer tecnologia.
+O Post ficou um pouco extenso mas contém o básico pra começar.</p>
+
+<h2>O que são e porque testamos software de forma automatizada ?</h2>
+
+<p>A frase &ldquo;A computação veio pra resolver problemas que não existiam antes&rdquo; pode ser aplicada para nosso dia-a-dia como desenvolvedor de software. A cada novo release, existem chances de quebrarmos funcionalidades antigas. Em softwares monolíticos e pouco distribuídos a chance só aumenta.<br/>
+As empresas costumam criar times ou dar papéis de testadores a certas pessoas. Esse papel define que a cada lançamento de bugfix ou feature, será preciso cobrir o software de testes para garantir que nada quebrou, o que torna o trabalho repetitivo, caro e cansativo.
+E como sabemos, precisamos responder a mudanças de mercado cada vez mais rápido. O movimento agile com o pensamento em <a href="http://martinfowler.com/bliki/ContinuousDelivery.html">entregas curtas e contínuas</a> quase nos força a pensar numa maneira de facilitar as vidas dessas &ldquo;equipes de teste&rdquo;.<br/>
+Entram os testes automatizados; Se somos escritores de programas, porque não fazer programas que testam programas? Dessa forma, a cada novo release, apenas rodaríamos o programa testador para ver se o software ainda se mantém consistente (, todos os testes passando).</p>
+
+<h2>Testes unitários</h2>
+
+<p>Dentro do mundo de testes automatizados, existem várias subdivisões, entre elas temos os testes unitários.  Nesse tipo de teste, verificamos se uma unidade mínima do software, um método de classe/instância por exemplo, nos responde com valores esperados em todos os casos cobertos.
+Criamos uma classe que representa uma bateria com casos de teste, no phpunit da seguinte forma:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// arquivo em /meudiretorio/algumacoisaTest.php</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">AlgumacoisaTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Para rodar o arquivo, usamos o phpunit (que pode ser encontrado via arquivo .phar) :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>phpunit.phar /meudiretorio/algumacoisaTest
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A saída no console será algo como</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>F
+</span><span class='line'>
+</span><span class='line'>Time: 33 ms, Memory: 2.75Mb
+</span><span class='line'>
+</span><span class='line'>There was 1 failure:
+</span><span class='line'>
+</span><span class='line'>1<span class="o">)</span> Warning
+</span><span class='line'>No tests found in class <span class="s2">&quot;AlgumacoisaTest&quot;</span>.
+</span><span class='line'>
+</span><span class='line'>FAILURES!
+</span><span class='line'>Tests: 1, Assertions: 0, Failures: 1.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ou seja, você criou uma bateria de testes mas não definiu nenhum caso de teste.</p>
+
+<h2>Definindo um problema</h2>
+
+<p>Vamos criar um problema em que uma classe irá nos atender.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>Precisamos de um programa que mande e-mails de newsletter para usuários.
+</span><span class='line'>Cada usuário se inscreve em apenas uma de duas opções:  Newsletter tecnologia ou Newsletter filosofia.
+</span><span class='line'>Antes de cada envio é preciso perceber se o usuário não se descadastrou da lista,
+</span><span class='line'>acessando uma api simples de um serviço chamado minhanews.io.
+</span><span class='line'>Basta acessar a url http://minhanews.io/&lt;email&gt;/status e um json do tipo
+</span><span class='line'>&#39;{ tecnologia: true, filosofia: false }&#39; será encontrado,
+</span><span class='line'>onde as chaves dizem sobre o cadastro na newsletter.
+</span><span class='line'>Como saída do programa queremos todos os e-mails que foram enviados. Agrupados por tipo de news.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>TDD</h2>
+
+<p>Sobre testes temos uma prática chamada <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD (Testing driven development)</a>. Com ela os programadores sempre escrevem os testes antes do código. O que faz com que o código só exista para atender os testes.
+Como um tempo, um ganho muito alto na arquitetura de código vem e isso também nos faz pensar melhor no problema antes de sair codando. <br/>
+Vamos criar um roteiro para a soluão de nosso problema:</p>
+
+<ul>
+<li>Você possui uma coleção de e-mails.</li>
+<li>Para cada e-mail verificar se o usuário ainda está cadastrado.</li>
+<li>Se ainda estiver cadastrado envie o e-mail e guarde a conta numa coleção.</li>
+<li>Se não estiver cadastrado na newsletter, ignore o usuário.</li>
+<li>Retorne a coleção com os usuários que receberam e-mails.</li>
+</ul>
+
+
+<h2>Conhecendo um pouco as dependências</h2>
+
+<h3>Coleção de usuários</h3>
+
+<p>Vamos receber no método que iremos testar, um array de objetos do seguinte tipo:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">User</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">const</span> <span class="no">NEWS_TECHNOLOGY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">const</span> <span class="no">NEWS_PHILOSOPHY</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">private</span> <span class="nv">$email</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">private</span> <span class="nv">$news</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Setters e Getters ...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Enviando e-mail com o SwiftMailer</h3>
+
+<p>Usaremos a library SwiftMailer para enviar o nosso e-mail de newsletter e uma introdução simples pode ser vista abaixo:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$transport</span> <span class="o">=</span> <span class="nx">Swift_SmtpTransport</span><span class="o">::</span><span class="na">newInstance</span><span class="p">(</span><span class="s1">&#39;smtp.example.org&#39;</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">setUsername</span><span class="p">(</span><span class="s1">&#39;your username&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">setPassword</span><span class="p">(</span><span class="s1">&#39;your password&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// instanciando um mensageiro  </span>
+</span><span class='line'><span class="nv">$mailer</span> <span class="o">=</span> <span class="nx">Swift_Mailer</span><span class="o">::</span><span class="na">newInstance</span><span class="p">(</span><span class="nv">$transport</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// criando uma mensagem</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">=</span> <span class="nx">Swift_Message</span><span class="o">::</span><span class="na">newInstance</span><span class="p">(</span><span class="s1">&#39;Assunto&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">setFrom</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;remetente@doe.com&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;John Doe&#39;</span><span class="p">))</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">setTo</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;destinatario@domain.org&#39;</span><span class="p">,</span> <span class="s1">&#39;outro@domain.org&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Um nome&#39;</span><span class="p">))</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">setBody</span><span class="p">(</span><span class="s1">&#39;Sua mensagem!&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// enviando a mensagem</span>
+</span><span class='line'><span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mailer</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Requisições http com Guzzle</h3>
+
+<p>Como precisaremos acessar uma url para verificarmos o tipo de newsletter dos usuários, usaremos o melhor client http em php, o Guzzle. A ferramenta é manipulada da seguinte forma:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GuzzleHttp\Client</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$response</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;http://seusite.com.br&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">json</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Autoloading</h3>
+
+<p>Não iremos abordar o autoloading de arquivos nesse post, você poderia utilizar o <a href="https://getcomposer.org/doc/01-basic-usage.md#autoloading">autoload do composer</a> e a <a href="https://phpunit.de/manual/current/en/textui.html">opção de bootstraping do phpunit</a> para resolver o problema</p>
+
+<h2>Mão na massa, primeiro teste</h2>
+
+<p>Vamos começar finalmente a codar. O TDD afirma, como disse, que primeiro escrevemos testes. Vamos começar todo nome de método de teste com o prefixo test, assim o phpunit entederá que precisa rodá-lo.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">NewsletterTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaRetornarGruposVaziosSeRecebeuNenhumEmail</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// valor esperado</span>
+</span><span class='line'>      <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>          <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>      <span class="p">];</span>
+</span><span class='line'>      <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$service</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Newsletter</span><span class="p">;</span>
+</span><span class='line'>      <span class="c1">// valor encontrado</span>
+</span><span class='line'>      <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$service</span><span class="o">-&gt;</span><span class="na">sendAll</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// asserção: valor encontrado é o valor esperado ? </span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$expected</span><span class="p">,</span> <span class="nv">$groups</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>O nome que damos para os testes devem ser auto explicativos, nesse caso ele diz que a chamada de &ldquo;sendAll&rdquo; deveria não enviar nenhum email e consequentemente ter arrays vazios como retorno.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Fatal error: Class <span class="s1">&#39;Newsletter&#39;</span> not found in /meudiretorio/news.php on line 13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Claro que o teste irá falhar, a classe que será coberta pelos testes (Newsletter) ainda não foi criada. Simplesmente iremos escrevê-la.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Outro erro irá ocorrer quando rodarmos os testes:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Fatal error: Call to undefined method Newsletter::sendAll<span class="o">()</span> in /meudiretorio/news.php on line 20
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Temos que nos preocupar primeiro em passar o teste, codamos o mínimo para que isso aconteça:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>O teste passou!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>.
+</span><span class='line'>
+</span><span class='line'>Time: 33 ms, Memory: 2.75Mb
+</span><span class='line'>
+</span><span class='line'>OK <span class="o">(</span>1 <span class="nb">test</span>, 1 assertion<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>E sim, o código que produzimos é muito imaturo, mas ele atende ao nosso primeiro passo, e a intenção é justamente não desenvolver todo o algoritmo de uma vez.</p>
+
+<h2>Segundo teste</h2>
+
+<p>Vamos criar um segundo teste que faça nosso código evoluir, afinal queremos resolver todo o problema proposto.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">NewsletterTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// primeiro teste</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaTerUmEmailNoGrupoDeTecnologia</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// usuario do tipo tecnologia</span>
+</span><span class='line'>      <span class="nv">$email</span> <span class="o">=</span> <span class="s2">&quot;cloudson@outlook.com&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setEmail</span><span class="p">(</span><span class="nv">$email</span><span class="p">);</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setNews</span><span class="p">(</span><span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// valor esperado diz que um email de tecnologia foi enviado para cloudson@outlook.com</span>
+</span><span class='line'>      <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$email</span><span class="p">],</span>
+</span><span class='line'>          <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>      <span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// passaremos uma coleção com um usuário</span>
+</span><span class='line'>      <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$service</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Newsletter</span><span class="p">;</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$service</span><span class="o">-&gt;</span><span class="na">sendAll</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$expected</span><span class="p">,</span> <span class="nv">$groups</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>.F
+</span><span class='line'>
+</span><span class='line'>Time: 182 ms, Memory: 3.00Mb
+</span><span class='line'>
+</span><span class='line'>There was 1 failure:
+</span><span class='line'>
+</span><span class='line'>1<span class="o">)</span> NewsletterTest::testDeveriaEnviarUmEmailDeTecnologia
+</span><span class='line'>Failed asserting that two arrays are equal.
+</span><span class='line'>--- Expected
+</span><span class='line'>+++ Actual
+</span><span class='line'>@@ @@
+</span><span class='line'> Array <span class="o">(</span>
+</span><span class='line'>     <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=</span>&gt; Array <span class="o">(</span>
+</span><span class='line'>-        <span class="nv">0</span> <span class="o">=</span>&gt; <span class="s1">&#39;cloudson@outlook.com&#39;</span>
+</span><span class='line'>     <span class="o">)</span>
+</span><span class='line'>     <span class="s1">&#39;filosofia&#39;</span> <span class="o">=</span>&gt; Array <span class="o">()</span>
+</span><span class='line'> <span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>/meudiretorio/news.php:83
+</span><span class='line'>
+</span><span class='line'>FAILURES!
+</span><span class='line'>Tests: 2, Assertions: 2, Failures: 1.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Novamente iremos nos concentrar em fazer o teste passar, mas nos atentando ao fato de não quebrar o primeiro teste.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>        <span class="c1">// recebe a coleção de usuários, e assume que todos são do tipo tecnologia</span>
+</span><span class='line'>        <span class="c1">// perceba que se a coleção for vazia, continuamos com o comportamento anterior</span>
+</span><span class='line'>        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nv">$groups</span><span class="p">[</span><span class="s1">&#39;tecnologia&#39;</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>..
+</span><span class='line'>
+</span><span class='line'>Time: 42 ms, Memory: 2.75Mb
+</span><span class='line'>
+</span><span class='line'>OK <span class="o">(</span>2 tests, 2 assertions<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Refatorando código</h2>
+
+<p>Uma das mais importantes etapas do desenvolvimento orientado a testes é a refatoração, nela modificamos o código sem alterar o sentido do mesmo, e consequentemente, sem quebrar os testes.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// apenas alteramos a forma como se descobre em que grupo de  newsletter o</span>
+</span><span class='line'>          <span class="c1">// usuário está.</span>
+</span><span class='line'>            <span class="nv">$key</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getNews</span><span class="p">()</span> <span class="o">==</span> <span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;tecnologia&#39;</span> <span class="o">:</span> <span class="s1">&#39;filosofia&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="nv">$groups</span><span class="p">[</span><span class="nv">$key</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Se você rodar os testes, eles continuam passando.</p>
+
+<h2>Injeção de dependência</h2>
+
+<p>Como sabemos vamos precisar que nosso método sendAll mande uma request para a api minhanews.io usando o Guzzle e envie um e-mail com o SwiftMailer.
+Com essa relação de dependência entre nossa classe e as duas ferramentas, podemos usar um padrão chamado <a href="http://stackoverflow.com/questions/130794/what-is-dependency-injection">injeção de dependência (DI)</a> onde simplesmente recebemos as dependências de fora da classe, como argumentos no construtor, por exemplo.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$http</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$mailer</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">\Guzzle\Client</span> <span class="nv">$http</span><span class="p">,</span> <span class="nx">\Swift_Mailer</span> <span class="nv">$mailer</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">http</span> <span class="o">=</span> <span class="nv">$http</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span> <span class="o">=</span> <span class="nv">$mailer</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nv">$key</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getNews</span><span class="p">()</span> <span class="o">==</span> <span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;tecnologia&#39;</span> <span class="o">:</span> <span class="s1">&#39;filosofia&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="nv">$groups</span><span class="p">[</span><span class="nv">$key</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Se rodarmos os testes, veremos que quebramos tudo, ou seja, os dois testes não correspondem ao estado atual do código.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>EE
+</span><span class='line'>
+</span><span class='line'>Time: 37 ms, Memory: 2.75Mb
+</span><span class='line'>
+</span><span class='line'>There were 2 errors:
+</span><span class='line'>
+</span><span class='line'>1<span class="o">)</span> NewsletterTest::testDeveriaRetornarGruposVaziosSeRecebeuNenhumEmail
+</span><span class='line'>Argument 1 passed to Newsletter::__construct<span class="o">()</span> must be an instance of Guzzle<span class="se">\C</span>lient, none given, called in /home/cloudson/Desktop/news.php on line 72 and defined
+</span><span class='line'>
+</span><span class='line'>/home/cloudson/Desktop/news.php:38
+</span><span class='line'>/home/cloudson/Desktop/news.php:72
+</span><span class='line'>
+</span><span class='line'>2<span class="o">)</span> NewsletterTest::testDeveriaEnviarUmEmailDeTecnologia
+</span><span class='line'>Argument 1 passed to Newsletter::__construct<span class="o">()</span> must be an instance of Guzzle<span class="se">\C</span>lient, none given, called in /home/cloudson/Desktop/news.php on line 95 and defined
+</span><span class='line'>
+</span><span class='line'>/home/cloudson/Desktop/news.php:38
+</span><span class='line'>/home/cloudson/Desktop/news.php:95
+</span><span class='line'>
+</span><span class='line'>FAILURES!
+</span><span class='line'>Tests: 2, Assertions: 0, Errors: 2.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Mockando classes</h2>
+
+<p>Poderíamos simplesmente instanciar e passar as dependências necessárias para nossa classe Newsletter. Mas pensando em testes que verificam a integridade de uma porção pequena de código isso pode ser complicado. Pense que estamos falando de dependências que irão enviar e-mail e requisições http, recursos externos que podem estar fora do ar (quem garante que teremos internet? Que a api irá responder corretamente? Que a máquina não bloqueia as portas de smtp? ). Para evitar que o sucesso de nossos testes dependam de outros fatores, além do código propriamente dito, criamos instâncias fakes que simulam o comportamento de uma dependência real.<br/>
+Há várias formas de simular esse comportamento como você pode ver num <a href="http://martinfowler.com/articles/mocksArentStubs.html">artigo do Martin Fowler</a>, a forma que iremos tratar é a de Mocking.
+É importante dizer que essa técnica só é possível graças a injeção de dependência, se instanciássemos classes dentro de nossa Newsletter, não teríamos a possibilidade de substituir uma real por uma fake.
+Veja abaixo como criar um mock da classe Swift_Mailer usando o phpunit</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="c1">// ... dentro de uma class \PHPUnit_Framework_TestCase ... </span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$mailer</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getMockBuilder</span><span class="p">(</span><span class="s1">&#39;\Swift_Mailer&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">disableOriginalConstructor</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getMock</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vamos agora reescrever a classe de teste e utilizar os mocks nos momentos certos, atente-se aos comentários:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">NewsletterTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">private</span> <span class="nv">$mailer</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$client</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$service</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// esse método é chamado antes de cada teste :) </span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">setUp</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// mockamos as duas dependencias</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getMockBuilder</span><span class="p">(</span><span class="s1">&#39;\Swift_Mailer&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">disableOriginalConstructor</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getMock</span><span class="p">();</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">client</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getMockBuilder</span><span class="p">(</span><span class="s1">&#39;\Guzzle\Client&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">disableOriginalConstructor</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getMock</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// utilizamos um atributo de instância com as dependências</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Newsletter</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">client</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaRetornarGruposVaziosSeRecebeuNenhumEmail</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">];</span>
+</span><span class='line'>        <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// utilzamos o atributo de instância ao inves de instanciar a classe Newsletter</span>
+</span><span class='line'>        <span class="c1">// a todo momento.</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">service</span><span class="o">-&gt;</span><span class="na">sendAll</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$expected</span><span class="p">,</span> <span class="nv">$groups</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaEnviarUmEmailDeTecnologia</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$email</span> <span class="o">=</span> <span class="s2">&quot;cloudson@outlook.com&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setEmail</span><span class="p">(</span><span class="nv">$email</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setNews</span><span class="p">(</span><span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$email</span><span class="p">],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">service</span><span class="o">-&gt;</span><span class="na">sendAll</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$expected</span><span class="p">,</span> <span class="nv">$groups</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Os testes voltam a passar e agora vamos novamente evoluir nosso código a partir de um novo teste, em que afirmaremos que &ldquo;o switfmail irá enviar um email para o usuario&rdquo;.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">NewsletterTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaEnviarEmail</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$email</span> <span class="o">=</span> <span class="s2">&quot;cloudson@outlook.com&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">user</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setemail</span><span class="p">(</span><span class="nv">$email</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setnews</span><span class="p">(</span><span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nv">$email</span><span class="p">],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// ordenamos que o mock de swiftmailer espera rodar uma vez o método send.</span>
+</span><span class='line'>        <span class="c1">// Isso funciona como uma asserção. </span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span><span class="o">-&gt;</span><span class="na">expects</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">once</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">service</span><span class="o">-&gt;</span><span class="na">sendall</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>..F
+</span><span class='line'>
+</span><span class='line'>Time: 40 ms, Memory: 3.25Mb
+</span><span class='line'>
+</span><span class='line'>There was 1 failure:
+</span><span class='line'>
+</span><span class='line'>1<span class="o">)</span> NewsletterTest::testDeveriaEnviarEmail
+</span><span class='line'>Expectation failed <span class="k">for </span>method name is equal to &lt;string:send&gt; when invoked 1 <span class="nb">time</span><span class="o">(</span>s<span class="o">)</span>.
+</span><span class='line'>Method was expected to be called 1 <span class="nb">times</span>, actually called 0 times.
+</span><span class='line'>
+</span><span class='line'>FAILURES!
+</span><span class='line'>Tests: 3, Assertions: 3, Failures: 1.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ao rodar os testes, vemos que o phpunit nos disse que send() era esperado 1 vez e não foi invocado nenhuma vez, em nossa classe Newsletter, iremos usá-lo.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nv">$key</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getNews</span><span class="p">()</span> <span class="o">==</span> <span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;tecnologia&#39;</span> <span class="o">:</span> <span class="s1">&#39;filosofia&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="nv">$message</span> <span class="o">=</span> <span class="nx">Swift_Message</span><span class="o">::</span><span class="na">newInstance</span><span class="p">(</span><span class="s1">&#39;Wonderful Subject&#39;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setFrom</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;cloudson@claudson.com.br&#39;</span><span class="p">))</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setTo</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">()))</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setBody</span><span class="p">(</span><span class="nv">$key</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+</span><span class='line'>            <span class="nv">$groups</span><span class="p">[</span><span class="nv">$key</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Testes passando.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PHPUnit 4.5.0 by Sebastian Bergmann and contributors.
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>Time: 237 ms, Memory: 3.25Mb
+</span><span class='line'>
+</span><span class='line'>OK <span class="o">(</span>3 tests, 3 assertions<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Mockando o Guzzle</h2>
+
+<p>Para este post estamos chegando no último passo. Estamos enviando e-mail para todos os usuários, mas a especificação dizia que era preciso verificar se eles não se descadastraram. Vamos usar nosso mock de \Guzzle\Client para simular uma chamada get e um retorno para ela. Veja abaixo</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ResponseSubscribed</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">json</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">json_encode</span><span class="p">([</span>
+</span><span class='line'>      <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span> <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>      <span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ResponseUnSubscribed</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">json</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">json_encode</span><span class="p">([</span>
+</span><span class='line'>      <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span> <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+</span><span class='line'>      <span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ... dentro do metodo setup da classe de testes</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">client</span><span class="o">-&gt;</span><span class="na">expects</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">any</span><span class="p">())</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">method</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">-&gt;</span><span class="na">will</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">returnCallback</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="nv">$url</span><span class="p">){</span>
+</span><span class='line'>  <span class="c1">// Perceba, estamos usando any() pra definir que o método get pode ser chamado várias </span>
+</span><span class='line'>  <span class="c1">//vezes, e que pra cada uma delas ele irá retornar um valor que é decidido por uma função </span>
+</span><span class='line'>  <span class="c1">//anônima. </span>
+</span><span class='line'>  <span class="c1">// Nessa função estamos usando as classes definidas acima que também simulam</span>
+</span><span class='line'>  <span class="c1">// comportamentos do Guzzle. Nesse caso estamos usando stubs, mas não</span>
+</span><span class='line'>  <span class="c1">// entraremos em detalhe nesse post. </span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nv">$response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ResponseSubscribed</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nb">strpos</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="s2">&quot;cloudson&quot;</span><span class="p">)</span> <span class="o">===</span> <span class="k">FALSE</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ResponseUnSubscribed</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nv">$response</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Da ultima vez que afirmamos algo sobre um método mockado, o fizemos dentro do método de teste, pois ele era restrito para o teste. Nesse caso vamos colocar esse código no setup() dos testes pois imaginamos que esse comportamento será padrão.</p>
+
+<p>Agora, evoluindo nosso código, já podemos chamar o guzzle para verificar o status dos usuários  e definir se eles se descadastraram das newsletters.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Newsletter</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$http</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">private</span> <span class="nv">$mailer</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">\Guzzle\Client</span> <span class="nv">$http</span><span class="p">,</span> <span class="nx">\Swift_Mailer</span> <span class="nv">$mailer</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">http</span> <span class="o">=</span> <span class="nv">$http</span><span class="p">;</span>
+</span><span class='line'>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span> <span class="o">=</span> <span class="nv">$mailer</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">public</span> <span class="k">function</span> <span class="nf">sendAll</span><span class="p">(</span><span class="nv">$users</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$groups</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span><span class='line'>            <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+</span><span class='line'>            <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>        <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">http</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;http://minhanews.io/&#39;</span><span class="o">.</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">()</span><span class="o">.</span><span class="s1">&#39;/status&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$response</span><span class="o">-&gt;</span><span class="na">json</span><span class="p">(),</span> <span class="k">true</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;tecnologia&#39;</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;filosofia&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">$key</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getNews</span><span class="p">()</span> <span class="o">==</span> <span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;tecnologia&#39;</span> <span class="o">:</span> <span class="s1">&#39;filosofia&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="nv">$message</span> <span class="o">=</span> <span class="nx">Swift_Message</span><span class="o">::</span><span class="na">newInstance</span><span class="p">(</span><span class="s1">&#39;Wonderful Subject&#39;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setFrom</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;cloudson@claudson.com.br&#39;</span><span class="p">))</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setTo</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">()))</span>
+</span><span class='line'>                  <span class="o">-&gt;</span><span class="na">setBody</span><span class="p">(</span><span class="nv">$key</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span><span class="o">-&gt;</span><span class="na">send</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+</span><span class='line'>            <span class="nv">$groups</span><span class="p">[</span><span class="nv">$key</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="nv">$groups</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Último teste</h2>
+
+<p>Fugindo um pouco do TDD e escrevendo testes depois do código, vamos assegurar que quando a api diz que um usuario está descadastrado, ele não recebe e-mails</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">NewsletterTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit_Framework_TestCase</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">// ...</span>
+</span><span class='line'>  <span class="k">public</span> <span class="k">function</span> <span class="nf">testDeveriaEnviarAPenasUmEmail</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">user</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setemail</span><span class="p">(</span><span class="s2">&quot;cloudson@outlook.com&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setnews</span><span class="p">(</span><span class="nx">User</span><span class="o">::</span><span class="na">NEWS_TECHNOLOGY</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$user2</span> <span class="o">=</span> <span class="k">clone</span> <span class="nv">$user</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setEmail</span><span class="p">(</span><span class="s2">&quot;joao@ti.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$user3</span> <span class="o">=</span> <span class="k">clone</span> <span class="nv">$user</span><span class="p">;</span>
+</span><span class='line'>      <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">setEmail</span><span class="p">(</span><span class="s2">&quot;maria@sensio.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$expected</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>          <span class="s1">&#39;tecnologia&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;cloudson@outlook.com&quot;</span><span class="p">],</span>
+</span><span class='line'>          <span class="s1">&#39;filosofia&#39;</span> <span class="o">=&gt;</span> <span class="p">[]</span>
+</span><span class='line'>      <span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$emails</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$user</span><span class="p">,</span> <span class="nv">$user2</span><span class="p">,</span> <span class="nv">$user3</span><span class="p">);</span>
+</span><span class='line'>      <span class="c1">// apesar de passarmos 3 usuarios, </span>
+</span><span class='line'>      <span class="c1">//o metodo send foi chamado apenas uma vez</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailer</span><span class="o">-&gt;</span><span class="na">expects</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">once</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nv">$groups</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">service</span><span class="o">-&gt;</span><span class="na">sendall</span><span class="p">(</span><span class="nv">$emails</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Os testes passam e provam que nosso código está pronto :)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">PHPUnit</span> <span class="mf">4.5</span><span class="o">.</span><span class="mi">0</span> <span class="nx">by</span> <span class="nx">Sebastian</span> <span class="nx">Bergmann</span> <span class="k">and</span> <span class="nx">contributors</span><span class="o">.</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">....</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Time</span><span class="o">:</span> <span class="mi">42</span> <span class="nx">ms</span><span class="p">,</span> <span class="nx">Memory</span><span class="o">:</span> <span class="mf">3.25</span><span class="nx">Mb</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">OK</span> <span class="p">(</span><span class="mi">4</span> <span class="nx">tests</span><span class="p">,</span> <span class="mi">4</span> <span class="nx">assertions</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Novos testes?</h2>
+
+<p>Quando falamos em testes unitários, podemos verificar a <a href="https://en.wikipedia.org/wiki/Code_coverage">cobertura</a> do mesmo, que seria; baseado nos seus testes, quais partes de seu código são atingido por eles? Isso poderia dar um indício de bons locais onde possíveis bugs podem aparecer.
+Boas perguntas para novos casos de teste poderiam ser:</p>
+
+<ul>
+<li>Quando um usuario é do tipo filosofia, ele recebe email filosofia?</li>
+<li>Quando um usuario recebe um status diferente de seu tipo, o que acontece?</li>
+<li>Quando a api não retorna um json esperado, o que a classe Newsletter faz?</li>
+<li>E se eu quisesse personalizar mais o corpo dos e-mails?</li>
+</ul>
+
+
+<h2>Conclusão</h2>
+
+<p>O TDD é um bom método para pensarmos melhor no problema, a velocidade de desenvolvimento nos fala sobre nosso entendimento e a cobertura pode ser uma métrica interessante para novos desenvolvedores no projeto.
+Ufa! Deu trabalho, mas nossa classe está coberta de testes, e caso alguem a altere, os testes podem alertar problemas.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[API's - Uma comparação com websites]]></title>
