@@ -4,7 +4,7 @@
   <title><![CDATA[Claudson Oliveira]]></title>
   <link href="http://cloudson.github.io/atom.xml" rel="self"/>
   <link href="http://cloudson.github.io/"/>
-  <updated>2015-02-24T19:15:11-03:00</updated>
+  <updated>2015-03-02T21:26:58-03:00</updated>
   <id>http://cloudson.github.io/</id>
   <author>
     <name><![CDATA[Claudson Oliveira]]></name>
@@ -53,7 +53,7 @@ A memória secundária fala sobre o disco rígido (HD). É muito custoso (demora
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ao declararmos uma variável inteira em C, estamos na verdade pedindo para o sistema operacional reservar (ou alocar) um espaço na memória RAM do tamanho de uma palavra computacional, sendo então 4 bytes numa arquitetura de 64 bits.  Para o computador e o sistema operacional, o nome &ldquo;idade&rdquo; é irrelevante, ele é apenas um label para humanos e a cada vez que é citado, estamos na verdade falando de um lugar da memória.</p>
+<p>Ao declararmos uma variável inteira em C, estamos na verdade pedindo para o sistema operacional reservar (ou alocar) um espaço na memória RAM do tamanho de &frac12; palavra computacional, sendo então 4 bytes numa arquitetura de 64 bits.  Para o computador e o sistema operacional, o nome &ldquo;idade&rdquo; é irrelevante, ele é apenas um label para humanos e a cada vez que é citado, estamos na verdade falando de um lugar da memória.</p>
 
 <p><img src="http://cloudson.github.io/images/posts/p1.png" alt="" /></p>
 
