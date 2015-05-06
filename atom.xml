@@ -4,7 +4,7 @@
   <title><![CDATA[Claudson Oliveira]]></title>
   <link href="http://cloudson.github.io/atom.xml" rel="self"/>
   <link href="http://cloudson.github.io/"/>
-  <updated>2015-03-19T00:58:57-03:00</updated>
+  <updated>2015-05-05T22:40:10-03:00</updated>
   <id>http://cloudson.github.io/</id>
   <author>
     <name><![CDATA[Claudson Oliveira]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[E aí, (ainda) tá gostando de SP?!]]></title>
+    <link href="http://cloudson.github.io/2015/05/05/e-ai-ainda-ta-gostando-de-sp/"/>
+    <updated>2015-05-05T21:49:43-03:00</updated>
+    <id>http://cloudson.github.io/2015/05/05/e-ai-ainda-ta-gostando-de-sp</id>
+    <content type="html"><![CDATA[<p>O 5º dia do 5º mês de 2015, faz exatos 2 anos que cheguei na cidade grande.
+É incrível pensar que todas as pessoas conheci e tudo que aprendi por aqui aconteceu em tão pouco tempo.
+Quando eu era um recém chegado, escrevi um texto sobre minhas <a href="http://cloudson.github.io/2013/08/17/e-ai-ta-gostando-de-sp/">(primeiras) impressões</a>, nada mais justo que voltar aqui para reafirmar e desmentir coisas ditas naquela época.</p>
+
+<h3>O que é São Paulo ?</h3>
+
+<p>Depois de muito pensar, cheguei numa resposta para todo pré-conceito que cerca a cidade; &ldquo;As pessoas só pensam em trabalho&rdquo;, &ldquo;elas são frias&rdquo;, &ldquo;há muito estress&rdquo; &hellip; <br/>
+Eu vejo, nos trens e ônibus, nos olhos cansados dos trabalhadores, que eles estão ali porque querem algo melhor pra suas vidas, algo que talvez &ndash; e não muito improvavelmente &ndash; seus pais não tiveram.
+São Paulo é um projeto de vida para mudança, uma terra prometida &ndash; que não satisfaz todos os senhos, as vezes &ndash; você planeja vir pra cá pensando nas experiências e ganhos que terá, ao chegar se concentra em conseguí-los, se estressa muito mais quando algo dá errado, foca tanto no trabalho já que é o único caminho possível para conseguí-lo. A falsa-frieza, o stress e a relação com o trabalho muitas vezes só mostram que as pessoas não estão pra brincadeira.</p>
+
+<h3>Cultura</h3>
+
+<p>A cidade é muito cultural, é quase impossível viver aqui sem ter ido a um museu, até porque enquanto você sai de um trem para outro, você passa por meio de uma exposição fotográfica. São paulo também é a <a href="http://globotv.globo.com/rede-globo/jornal-hoje/v/sao-paulo-tem-o-maior-numero-de-muros-grafitados-do-mundo/3488739/">cidade mais grafitada do mundo</a>, e eu passei a amar grafites e pixações. É incrível como os muros falam por aqui.
+Com toda essa cultura, temos filas intermináveis a museus e por mais desagradável que isso possa parecer, mostra uma realidade completamente diferente da do restante do país.</p>
+
+<h3>Custos</h3>
+
+<p>Viver por aqui é muito caro, não é díficil encontrar restaurantes a R$ 50,00 por kg, apartamentos abaixo de mil reais são raridades, e essas serão suas maiores despesas mensais. Para vir pra são paulo você deve se preparar para esse choque bancário, não pense que você vai chegar e morar no Jardins, venha com calma ok cowboy ?</p>
+
+<h3>Ganhos</h3>
+
+<p>Apesar de seus gastos serem altos, para a área de tecnologia, sem rasgar dinheiro, você lucra ao morar aqui. E além de ganhos monetários, você tem acesso a cultura, entretenimento e lazer que pode ser difícil em outros lugares.</p>
+
+<h3>Algumas coisas não mudam</h3>
+
+<pre><code>"as pessoas não vêem ou valorizam o que muitos paulistanos passam para ter seu carro e casa própria. "
+</code></pre>
+
+<p>Como eu disse acima existe o conceito de que há muito emprego por aqui e isso torna tudo mais fácil. Não é bem assim, principalmente agora que o país não anda bem economicamente. Tenho amigos da área que demoraram a conseguir um bom emprego em meio a crise.</p>
+
+<pre><code>"é justamente o que eu estava buscando para minha carreira"
+</code></pre>
+
+<p>Acho que o paulistano preza muito por qualidade no trabalho, isso faz como que nesta área, utilizemos boas ferramentas e conceitos para desenvolver software. Felizmente ou não, muitas das discussões tecnológicas estão concentradas nas capitais também.</p>
+
+<h3>Algumas coisas mudam</h3>
+
+<pre><code>"O Paulistano (novamente!) - "Povo frio""
+</code></pre>
+
+<p>O paulistano não é frio como aparenta fora daqui, criei grandes amizades tanto no trabalho quanto fora dele, na maioria as pessoas são bem unidas. Sobre o povo, há alguns problemas políticos e culturais. O padrão de vida do paulistano é mais alto que boa parte do país, há uma certa prepotência de alguns em se achar superior, e também uma certa &ldquo;inocência&rdquo; em acreditar que essa é a realidade de todo um país.</p>
+
+<h3>Conclusão</h3>
+
+<p>Viver aqui é uma experiência incrível, repetiria cada passo e tropeço. Falar em morar na capital para sempre é complicado, há um certo desgaste no estilo de vida que bota tudo à prova. E o mundo é grande demais pra se ficar no mesmo lugar ;)</p>
+
+<p>Para manter a tradição de posts, uma música do Criolo que nos faz repensar São Paulo.</p>
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/-1cI4nYIQqs" frameborder="0" allowfullscreen></iframe>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dicas de (para) um programador afobado]]></title>
@@ -4135,7 +4193,7 @@ Colocando na média, o povo é incrível, é tão bom trabalhar e viver com pess
 
 <h3>O Paulistano (novamente!) &ndash; &ldquo;Povo frio&rdquo;</h3>
 
-<p>Aqui faz muito frio haha, custumam dizer que o povo é meio frio também, metaforicamente; Distante.
+<p>Aqui faz muito frio haha, costumam dizer que o povo é meio frio também, metaforicamente; Distante.
 Uma das minhas músicas preferidas atualmente é do Criolo. A música é velha mas música é isso, quando você menos espera ela se encaixa na sua vida :)</p>
 
 <iframe width="560" height="315" src="//www.youtube.com/embed/Xo-gBWX_jXc" frameborder="0" allowfullscreen></iframe>
