@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ponteiros e gerenciamento de memória em C - Claudson Oliveira</title>
+  <meta name="author" content="Claudson Oliveira">
+
+   
+  <meta name="description" content="Software developer, aspirante a dançarino, <br> e protagonista de sua própria vida.">
+  
+  <meta name="keywords" content="">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cloudson.github.io/2015/02/22/ponteiros-e-gerenciamento-de-memoria-em-c">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Claudson Oliveira" type="application/atom+xml">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap-collapse.js"></script>
+  <script src="/js/modernizr-2.0.js"></script>
+  <script src="/js/octopress.js" type="text/javascript"></script>
+  <script src="/js/application.js"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-17973396-3']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <div class="navbar navbar-inverse navbar-static-top">
+  	<div class="navbar-inner">
+         
+ 	    <div class="container">
+ 	  	   <div class="nav-collapse collapse navbar-responsive-collapse" style="height:0;">
+  	         <ul class="nav">
+    <li>
+    <img id="mini-me" src="http://gravatar.com/avatar/6df26656e0054a86babb6f83e06cf203.jpg?s=60">
+    </li>
+    <li class="first">
+    <a href="/">Claudson Oliveira</a></li>
+    
+</ul>
+
+<ul class="nav pull-right">
+    
+    <li><a href="http://github.com/cloudson" title="Github Profile"><i class="icon-github-sign social-navbar"></i></a></li>
+    
+    
+   
+    <li><a href="http://twitter.com/cloudson" title="Twitter Profile"><i class="icon-twitter-sign social-navbar"></i></a></li>
+    
+    
+    <li><a href="http://linkedin.com/in/cloudson" title="Linkedin Profile"><i class="icon-linkedin-sign social-navbar"></i></a></li>
+    
+    
+    
+    
+
+    
+</ul>
+
+  	       </div>
+        </div>
+       
+           
+  	</div>
+  </div>
+  <div class="container" id="main">
+      <div class="row-fluid">
+        <div id="content">
+         <div>
+<article class="hentry" role="article">
+  
+
+  <header>
+  <div class="jumbotron">
+    Fim do blog ? 
+	<h5>
+
+<i class="icon-calendar-empty"></i> <time datetime="2017-11-10T11:24:06-03:00" pubdate data-updated="true">Nov 10, 2017</time></h5>
+  </div>
+</header>
+  <div class="row-fluid">
+    <div class="span12">
+    <p>Meu último texto aqui no blog já faz mais de dois anos! Foi um período incrível da minha carreira onde aprendi muito trabalhando na <a href="http://easytaxi.com.br/" href="_blank">Easy Taxi</a>.</p>
+    <p>Estou retomando os textos mas não será por aqui, então de certa forma é o fim desse blog.</p>
+
+<h2>Medium</h2>
+<p>Estou aderindo/testando o Medium, é um sistema mais simples para escrever um texto de blog, mas você acaba perdendo algumas informaçes importantes sobre os usurios. 
+Pretendo pegar os textos daqui e mover para lá aos poucos, e escrever novos textos também, então acesseo <a href="https://medium.com/@cloudson" target="_blank">https://medium.com/@cloudson</a>
+
+
+<h2>Quero Ser Programador</h2>
+<p>Meu novo projeto é o <a href="http://queroserprogramador.com/" target="_blank">queroserprogramador.com/</p>, um blog com textos para quem está inciando na carreira. Lá eu pretendo escrever sobre Algoritmos,
+Estruturas de dados, Lógica, Linguagem de programação, etc. Escrevi um <a href="https://medium.com/@cloudson/quero-ser-programador-e-agora-474ffb7a9855" target="_blank">texto no Medium sobre a motivação</a> </p>
+
+<p>Espero ver vocês por lá. Qualquer dvida ou sugestão, deixe nos comentários.</p>
+
+      </div>
+    </div>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="row-fluid">
+        <footer class="footer-page" role="contentinfo">
+          <p>
+  Copyright &copy; 2015 - Claudson Oliveira -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> - Theme by <a href="http://alexgaribay.com">Alex Garibay</a>
+</p>
+
+
+        </footer>
+      </div>
+  </div>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'cloudsonblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cloudson.github.io/2015/02/22/ponteiros-e-gerenciamento-de-memoria-em-c/';
+        var disqus_url = 'http://cloudson.github.io/2015/02/22/ponteiros-e-gerenciamento-de-memoria-em-c/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+</body>
+</html>
